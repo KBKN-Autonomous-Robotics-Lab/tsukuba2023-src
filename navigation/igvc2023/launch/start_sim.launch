@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="use_ekf" default="true"/>
+    
+    <!-- The robot URDF model and world file -->
+    <arg name="model" default="$(find xacro)/xacro '$(find igvc2023)/urdf/orange.xacro'" />
+    <arg name="world" default="$(find igvc2023)/world/course_v2.world"/>
+
+    <!-- Initial pose of robot in the world--> 
+    <arg name="x"     default="0"/>
+    <arg name="y"     default="0"/>
+    <arg name="z"     default="0.1"/>
+    <arg name="roll"  default="0"/>
+    <arg name="pitch" default="0"/>
+    <arg name="yaw"   default="0"/>
+
+
+    <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name"   value="$(arg world)"/>
+        <arg name="paused"       value="false"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="gui"          value="true"/>
+        <arg name="headless"     value="false"/>
+        <arg name="debug"        value="false"/>
+    </include>
+
+
+    <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+    <param name="robot_description" command="$(arg model)"/>
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" output="screen"
+     args="-urdf -model orange -param robot_description -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/>
+
+    <!-- Ground segmentation, Pointcloud to laserscan, Merge scans -->
+    <include file="$(find igvc2023)/launch/segmentation.launch"/>
+
+  <include file="$(find line_detection)/launch/igvc2022_line_detection.launch">
+    <arg name="is_sim" value="true"/>
+  </include>
+
+    <!-- Sensor fusion -->
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" clear_params="true" output="screen">
+        <rosparam command="load" file="$(find igvc2023)/config/ekf.yaml" />
+        <remap from="odom0" to="/odom" />
+        <remap from="odom1" to="/odometry/gps" />
+        <remap from="imu0" to="/imu" />
+    </node>
+    
+    <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform" clear_params="true" output="screen">
+        <rosparam command="load" file="$(find igvc2023)/config/navsatekf.yaml" />
+        <remap from="/imu/data" to="/imu" />
+        <remap from="/gps/fix" to="/fix" />
+    </node>
+    
+    <!-- Convert joint states to TF transforms for rviz, etc -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen"/>
+    
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+        <param name="use_gui" value="true"/>
+        <param name="rate"    value="50"/>
+    </node>
+    
+</launch>

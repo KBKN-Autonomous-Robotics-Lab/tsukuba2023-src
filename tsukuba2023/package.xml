@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>tsukuba2023</name>
+  <version>0.0.1</version>
+  <description>The tsukuba2023 package</description>
+  <maintainer email="KBKN@todo.todo">ubuntu</maintainer>
+  <license>Apache 2.0</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>gmapping</exec_depend>
+  <exec_depend>waypoint_saver</exec_depend>
+  <exec_depend>rosserial_python</exec_depend>
+  <exec_depend>zlac8015d_ros</exec_depend>
+  <exec_depend>pointcloud_to_laserscan</exec_depend>
+  <exec_depend>ira_laser_tools</exec_depend>
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>urg_node</exec_depend>
+  <exec_depend>nodelet</exec_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>teleop_twist_joy</exec_depend>
+  <exec_depend>map_server</exec_depend>
+  <exec_depend>move_base</exec_depend>
+  <exec_depend>amcl</exec_depend>
+  <exec_depend>waypoint_nav</exec_depend>
+  <exec_depend>multi_map_manager</exec_depend>
+  <exec_depend>rviz</exec_depend>
+  <exec_depend>velodyne_gazebo_plugins</exec_depend>
+  <exec_depend>robot_localization</exec_depend>
+  <exec_depend>hector_gazebo_plugins</exec_depend>
+  <exec_depend>nmea_navsat_driver</exec_depend>
+  <exec_depend>cv_camera</exec_depend>
+  <exec_depend>robot_pose_ekf</exec_depend>
+  <export>
+    <gazebo_ros gazebo_media_path="${prefix}/world"/>
+    <gazebo_ros gazebo_model_path="${prefix}/models"/>
+  </export>
+</package>
