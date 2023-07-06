@@ -29,7 +29,7 @@
     </node>
     
     <!-- Imu node -->
-    <node name="imu_node" pkg="icm_20948" type="imu_node.py" output="screen">
+    <node name="imu_node" pkg="tsukuba2023" type="imu_node.py" output="screen">
         <param name="port" value="$(arg port)"/>
         <param name="time_out" value="$(arg time_out)"/>
         <param name="baudrate" value="$(arg baudrate)"/>
