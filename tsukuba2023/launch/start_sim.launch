@@ -34,10 +34,6 @@
     <!-- Ground segmentation, Pointcloud to laserscan, Merge scans -->
     <include file="$(find tsukuba2023)/launch/segmentation.launch"/>
 
-  <include file="$(find line_detection)/launch/tsukuba2022_line_detection.launch">
-    <arg name="is_sim" value="true"/>
-  </include>
-
     <!-- Sensor fusion 
     <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" clear_params="true" output="screen">
         <rosparam command="load" file="$(find tsukuba2023)/config/ekf.yaml" />
