@@ -11,7 +11,11 @@
     <arg name="gps2_dev"         default="/dev/sensors/GNSSrover"/>
     <arg name="use_ekf"          default="true"/>
     <arg name="urg_ip"           default="192.168.3.11"/>
-    
+    <arg name="port" default="/dev/sensors/imu"/>
+    <arg name="time_out" default="0.5"/>
+    <arg name="baudrate" default="115200"/>
+    <arg name="imu_topic" default="imu"/>
+    <arg name="frame_id" default="imu_link"/>
     
     <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
     <param name="robot_description" command="$(arg model)"/>
@@ -24,11 +28,13 @@
         <param name="rate"    value="50"/>
     </node>
     
-    
-    <!-- Node to setting up Arduino serial communication for IMU sensor -->
-    <node pkg="rosserial_python" type="serial_node.py" name="serial_node_IMU">
-        <param name="port" value="$(arg imu_dev)"/>
-        <param name="baud" value="115200"/>
+    <!-- Imu node -->
+    <node name="imu_node" pkg="icm_20948" type="imu_node.py" output="screen">
+        <param name="port" value="$(arg port)"/>
+        <param name="time_out" value="$(arg time_out)"/>
+        <param name="baudrate" value="$(arg baudrate)"/>
+        <param name="imu_topic" value="$(arg imu_topic)"/>
+        <param name="frame_id" value="$(arg frame_id)"/>
     </node>
     
     <!-- Node to setting up Arduino serial communication for LEDs 
@@ -85,7 +91,6 @@
         <param name="min_range"      value="0.4"/>
         <param name="organize_cloud" value="false"/>
     </node>
-    
     
     <!-- Ground segmentation, Pointcloud to laserscan, Merge scans -->
     <include file="$(find tsukuba2023)/launch/segmentation.launch"/>
