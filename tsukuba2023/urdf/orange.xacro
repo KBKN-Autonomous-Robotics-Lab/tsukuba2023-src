@@ -23,13 +23,13 @@
   <!-- Import 2D LiDAR model -->
   <xacro:include filename="$(find tsukuba2023)/urdf/sensors/hokuyo.urdf.xacro"/>
   <xacro:sensor_hokuyo name="hokuyo" parent="base_link" min_angle="-1.22" max_angle="1.22" samples="720">
-    <origin xyz="0.16 0.0 0.05" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0.16 0.0 0.1" rpy="0.0 0.0 0.0"/>
   </xacro:sensor_hokuyo>
   
   <!-- Import 3D LiDAR model -->
   <xacro:include filename="$(find tsukuba2023)/urdf/sensors/velodyne.urdf.xacro"/>
   <xacro:sensor_velodyne name="velodyne" parent="base_link" min_angle="-2.35619" max_angle="2.35619" samples="720">
-    <origin xyz="-0.13 0.0 0.70" rpy="0.0 0.0 0.0"/>
+    <origin xyz="-0.10 0.0 0.95" rpy="0.0 0.0 0.0"/>
   </xacro:sensor_velodyne>
   
   <!-- Import imu model -->
@@ -38,16 +38,16 @@
     <origin xyz="0 0.0 0.068" rpy="0.0 0.0 0.0"/>
   </xacro:sensor_imu>
   
-  <!-- Import fisheye camera model -->
+  <!-- Import fisheye camera model >
   <xacro:include filename="$(find tsukuba2023)/urdf/sensors/camera.urdf.xacro"/>
   <xacro:sensor_camera name="camera" parent="base_link">
     <origin xyz="-0.13 0 1" rpy="0 0 0"/>
-  </xacro:sensor_camera>
+  </xacro:sensor_camera-->
   
   <!-- Import gps model -->
   <xacro:include filename="$(find tsukuba2023)/urdf/sensors/gps.urdf.xacro"/>
   <xacro:sensor_gps name="gps" parent="base_link">
-    <origin xyz="0.5 0 0.75" rpy="0 ${PI} 0"/>
+    <origin xyz="0.6 0 0.65" rpy="0 ${PI} 0"/>
   </xacro:sensor_gps>
   
   <!-- Base Footprint -->
@@ -62,23 +62,23 @@
   <!-- Base Link -->
   <link name="base_link">
     <collision>
-      <origin xyz="-0.33 0.0 0.25" rpy="0.0 0.0 0.0"/>
+      <origin xyz="-0.07 0.0 0.55" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <box size="0.9 0.5 0.5"/>
+        <box size="0.7 0.5 1"/>
       </geometry>
     </collision>
 
     <visual>
-      <origin xyz="-0.355 0.0 0.3" rpy="0.0 0.0 0.0"/>
+      <origin xyz="0 0.0 0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="package://tsukuba2023/meshes/IGVCchassis.dae"/>
+        <mesh filename="package://tsukuba2023/meshes/Chassis.dae"/>
       </geometry>
     </visual>
 
     <inertial>
        <mass value="40" />
-       <origin xyz="-0.33 0.0 0.26" rpy="0.0 0.0 0.0"/>
-       <xacro:box_inertia m="40" x="0.9" y="0.5" z="0.45"/>
+       <origin xyz="-0.07 0.0 0.55" rpy="0.0 0.0 0.0"/>
+       <xacro:box_inertia m="40" x="0.67" y="0.5" z="1."/>
     </inertial>
   </link>
   
@@ -95,16 +95,23 @@
     <parent link="base_link"/>
   </joint>
   
+  <!-- Forward wheels -->
+  <joint name="forward_caster_hinge" type ="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <child link="forward_caster_link"/>
+    <parent link="base_link"/>
+  </joint>
+  
   <link name="left_caster_link">
     <collision>
-      <origin xyz="-0.735 0.10 -0.039" rpy="0.0 ${PI/2} ${PI/2}"/>
+      <origin xyz="-0.35 0.10 -0.039" rpy="0.0 ${PI/2} ${PI/2}"/>
       <geometry>
         <sphere radius="0.0625"/>
       </geometry>
     </collision>
     
     <visual>
-      <origin xyz="-0.735 0.10 -0.039" rpy="0.0 0.0 0.0"/>
+      <origin xyz="-0.35 0.10 -0.039" rpy="0.0 0.0 0.0"/>
       <geometry>
         <mesh filename="package://tsukuba2023/meshes/left_back_wheel.dae"/>
       </geometry>
@@ -113,14 +120,31 @@
   
   <link name="right_caster_link">
     <collision>
-      <origin xyz="-0.735 -0.10 -0.039" rpy="0.0 ${PI/2} ${PI/2}"/>
+      <origin xyz="-0.35 -0.10 -0.039" rpy="0.0 ${PI/2} ${PI/2}"/>
       <geometry>
         <sphere radius="0.0625"/>
       </geometry>
     </collision>
     
     <visual>
-      <origin xyz="-0.735 -0.10 -0.039" rpy="0.0 0.0 0.0"/>
+      <origin xyz="-0.35 -0.10 -0.039" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://tsukuba2023/meshes/right_back_wheel.dae"/>
+        <sphere radius="0.0625"/>
+      </geometry>
+    </visual>
+  </link>
+  
+  <link name="forward_caster_link">
+    <collision>
+      <origin xyz="0.2 0 -0.039" rpy="0.0 ${PI/2} ${PI/2}"/>
+      <geometry>
+        <sphere radius="0.0625"/>
+      </geometry>
+    </collision>
+    
+    <visual>
+      <origin xyz="0.2 0 -0.039" rpy="0.0 0.0 0.0"/>
       <geometry>
         <mesh filename="package://tsukuba2023/meshes/right_back_wheel.dae"/>
         <sphere radius="0.0625"/>
