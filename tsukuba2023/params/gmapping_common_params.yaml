@@ -14,10 +14,10 @@ lsigma: 0.075
 ogain: 3.0
 lskip: 0 #1
 minimumScore: 0.0
-srr: 0.01 
-srt: 0.02 
-str: 0.01 
-stt: 0.02 
+srr: 0.005 #0.01
+srt: 0.01 #0.02
+str: 0.005 #0.01
+stt: 0.01 #0.02
 linearUpdate: 0.5
 angularUpdate: 0.2
 temporalUpdate: -1.0
