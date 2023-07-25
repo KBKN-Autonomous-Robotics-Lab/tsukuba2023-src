@@ -110,7 +110,7 @@
     </node>
     
     <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="navsat" respawn="true">
-        <param name="port" value="$(arg gps_dev)"/>
+        <param name="port" value="$(arg gps1_dev)"/>
         <param name="baud" value="19200"/>
     </node>
    
