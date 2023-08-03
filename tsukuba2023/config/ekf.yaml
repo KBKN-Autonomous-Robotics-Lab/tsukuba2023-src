@@ -59,7 +59,7 @@ imu0_pose_rejection_threshold: 1.5                 # Note the difference in para
 imu0_twist_rejection_threshold: 0.4                #
 imu0_linear_acceleration_rejection_threshold: 0.8  #
 imu0_remove_gravitational_acceleration: true
-imu0_orientation_outlier_rejection: 4
+#imu0_orientation_outlier_rejection: 4
 
 process_noise_covariance: [0.05, 0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
                                0.0,    0.05, 0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
