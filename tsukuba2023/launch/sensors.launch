@@ -17,6 +17,9 @@
     <arg name="imu_topic" default="imu"/>
     <arg name="frame_id" default="imu_link"/>
     
+    <!-- mode0=robot_pose_ekf mode1=robot_localization_ekf -->
+    <arg name="mode" default="mode1"/>
+    
     <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
     <param name="robot_description" command="$(arg model)"/>
     
@@ -37,15 +40,17 @@
         <param name="frame_id" value="$(arg frame_id)"/>
     </node>
     
+    <!-- GPS node -->
+    <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="navsat" respawn="true">
+        <param name="port" value="$(arg gps1_dev)"/>
+        <param name="baud" value="19200"/>
+    </node>
+    
     <!-- Node to setting up Arduino serial communication for LEDs -->
     <node pkg="rosserial_python" type="serial_node.py" name="serial_node_LED">
         <param name="port" value="$(arg LED_dev)"/>
         <param name="baud" value="115200"/>
     </node>
-    
-    <!-- Node for LED contoroll -->
-    <node pkg="tsukuba2023" type="LED_control.py" name="LED_controller" output="screen"/>
-    
     
     <!-- Node for setting up 2D-LiDAR via Ethernet connection -->
     <node pkg="urg_node" type="urg_node" name="urg_node">
@@ -95,36 +100,34 @@
     <include file="$(find tsukuba2023)/launch/segmentation.launch"/>
     
     <!-- Sensor fusion -->
-    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" clear_params="true" output="screen">
-        <rosparam command="load" file="$(find tsukuba2023)/config/ekf.yaml" />
-        <remap from="odom0" to="/odom" />
-        <remap from="odom1" to="/odometry/gps" />
-        <remap from="imu0" to="/imu" />
-    </node>
+    <group if="$(eval mode=='mode0')">
+        <node name="combine_dr_measurements" pkg="robot_pose_ekf" type="robot_pose_ekf">
+            <remap from="odom"         to="/odom"/>
+            <remap from="imu_data"     to="/imu"/>
+            <param name="freq"                 value="30.0"/>
+            <param name="sensor_timeout"       value="1.0"/>
+            <param name="publish_tf"           value="true"/>
+            <param name="odom_used"            value="true"/>
+            <param name="imu_used"             value="true"/>
+            <param name="vo_used"              value="false"/>
+            <param name="output_frame"         value="odom"/>
+            <param name="base_footprint_frame" value="base_footprint"/>
+        </node>
+    </group>
     
-    <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform" clear_params="true" output="screen">
-        <rosparam command="load" file="$(find tsukuba2023)/config/navsatekf.yaml" />
-        <remap from="/imu/data" to="/imu" />
-        <remap from="/gps/fix" to="/fix" />
-    </node>
+    <group if="$(eval mode=='mode1')">
+        <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" clear_params="true" output="screen">
+            <rosparam command="load" file="$(find tsukuba2023)/config/ekf.yaml" />
+            <remap from="odom0" to="/odom" />
+            <remap from="odom1" to="/odometry/gps" />
+            <remap from="imu0" to="/imu" />
+        </node>
+        
+        <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform" clear_params="true" output="screen">
+            <rosparam command="load" file="$(find tsukuba2023)/config/navsatekf.yaml" />
+            <remap from="/imu/data" to="/imu" />
+            <remap from="/gps/fix" to="/fix" />
+        </node>
+    </group>
     
-    <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="navsat" respawn="true">
-        <param name="port" value="$(arg gps1_dev)"/>
-        <param name="baud" value="19200"/>
-    </node>
-   
-    <!--
-    <node name="combine_dr_measurements" pkg="robot_pose_ekf" type="robot_pose_ekf">
-        <remap from="odom"         to="/odom"/>
-        <remap from="imu_data"     to="/imu"/>
-        <param name="freq"                 value="30.0"/>
-        <param name="sensor_timeout"       value="1.0"/>
-        <param name="publish_tf"           value="true"/>
-        <param name="odom_used"            value="true"/>
-        <param name="imu_used"             value="true"/>
-        <param name="vo_used"              value="false"/>
-        <param name="output_frame"         value="odom"/>
-        <param name="base_footprint_frame" value="base_footprint"/>
-    </node>
-    -->
 </launch>

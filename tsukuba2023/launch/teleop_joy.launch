@@ -5,6 +5,8 @@
   <arg name="joy_dev"              default="/dev/input/js0"/>
   <arg name="cmd_vel"              default="/cmd_vel"/>
   
+  <!-- Node for LED contoroll -->
+  <node pkg="tsukuba2023" type="LED_control.py" name="LED_controller" output="screen"/>
   
   <!-- Node for joystick operation -->
   <node pkg="joy" type="joy_node" name="joy_node">
