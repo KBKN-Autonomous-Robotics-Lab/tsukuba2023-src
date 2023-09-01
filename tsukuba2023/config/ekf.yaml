@@ -8,6 +8,7 @@ transform_time_offset: 0.0 #0.5
 transform_timeout: 0.0
 print_diagnostics: true
 debug: false
+debug_out_file: /path/to/debug/file.txt
 publish_tf: true
 publish_acceleration: false
 permit_corrected_publication: false
