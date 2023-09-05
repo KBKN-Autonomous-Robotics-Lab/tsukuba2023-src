@@ -40,22 +40,30 @@
 *********************************************************************/
 #include <go_forward_recovery/go_forward_recovery.h>
 #include <pluginlib/class_list_macros.h>
-
+#include <ros/ros.h>
+#include <tf2_ros/buffer.h>
+#include <geometry_msgs/Twist.h>
+#include <geometry_msgs/Point.h>
+#include <angles/angles.h>
+#include <sensor_msgs/LaserScan.h>
 
 //register this planner as a RecoveryBehavior plugin
 
 PLUGINLIB_EXPORT_CLASS(go_forward_recovery::GoForwardRecovery, nav_core::RecoveryBehavior)
 
 namespace go_forward_recovery {
-GoForwardRecovery::GoForwardRecovery(): global_costmap_(NULL), local_costmap_(NULL), 
-  tf_(NULL), initialized_(false), world_model_(NULL) {} 
+GoForwardRecovery::GoForwardRecovery(): local_costmap_(NULL), 
+  initialized_(false), world_model_(NULL) {} 
+
+ros::NodeHandle n;
+ros::Publisher vel_pub;
+ros::Subscriber scan_sub;
+geometry_msgs::Twist cmd_vel;
+
 
 void GoForwardRecovery::initialize(std::string name, tf2_ros::Buffer*,
                                 costmap_2d::Costmap2DROS*, costmap_2d::Costmap2DROS* local_costmap){
   if(!initialized_){
-    name_ = name;
-    tf_ = tf_;
-    global_costmap_ = global_costmap_;
     local_costmap_ = local_costmap;
     world_model_ = new base_local_planner::CostmapModel(*local_costmap_->getCostmap());
     initialized_ = true;
@@ -68,6 +76,7 @@ GoForwardRecovery::~GoForwardRecovery(){
   delete world_model_;
 }
 
+/*
 double GoForwardRecovery::null_check(double target){
   if(!(target > 0)){
     target = (double)RANGE_MAX;
@@ -75,21 +84,28 @@ double GoForwardRecovery::null_check(double target){
   }
   return target;
 }
+*/
 
 void GoForwardRecovery::scanCallback(const sensor_msgs::LaserScan::ConstPtr& msg){
+  vel_pub = n.advertise<geometry_msgs::Twist>("cmd_vel", 10);
+  scan_sub = n.subscribe("/scan", 10, &GoForwardRecovery::scanCallback, this);
+  
   double center_number = (-msg->angle_min)/msg->angle_increment;
   double center = msg->ranges[center_number];
   double left = msg->ranges[center_number+128];
   double right = msg->ranges[center_number-128];
   double back_left = msg->ranges[msg->ranges.size()-1];
-
+  
+  sub_n = 0;
+  sub_flag = 1;
+  
   center = null_check(center);
   left = null_check(left);
   right = null_check(right);
   back_left = null_check(back_left);
 
-  //ROS_INFO("center: [%lf], left: [%lf], right: [%lf]", center, left, right);
-  //ROS_INFO("center number: [%lf]", (-msg->angle_min)/msg->angle_increment);
+  ROS_INFO("center: [%lf], left: [%lf], right: [%lf]", center, left, right);
+  ROS_INFO("center number: [%lf]", (-msg->angle_min)/msg->angle_increment);
 
   if(center < 0.5){
     ROS_WARN("center warning!!");
@@ -125,7 +141,8 @@ void GoForwardRecovery::scanCallback(const sensor_msgs::LaserScan::ConstPtr& msg
     cmd_vel.angular.z = 0.0;
   }
 
-  //ROS_INFO("x: %lf, y: %lf, z: %lf", cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z);
+  ROS_INFO("x: %lf, y: %lf, z: %lf", cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z);
+  
   vel_pub.publish(cmd_vel);
   ROS_INFO("sub_n: %d", sub_n);
   sub_n++;
@@ -142,11 +159,14 @@ void GoForwardRecovery::runBehavior(){
     return;
   }
 
-  ROS_WARN("Go forward recovery behavior started.");
-  sub_n = 0;
-  sub_flag = 1;
-  scan_sub = n.subscribe("/scan", 10, &GoForwardRecovery::scanCallback, this);
-  vel_pub = n.advertise<geometry_msgs::Twist>("cmd_vel", 10);
+  if (local_costmap_ == NULL)
+  {
+    ROS_ERROR("The costmap passed to the RotateRecovery object cannot be NULL. Doing nothing.");
+    return;
+  }
+
+  ROS_WARN("!!!!!Go forward recovery behavior started.!!!!!");
+
   while(n.ok()){
     if(sub_flag == 0){
       return;
