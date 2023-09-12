@@ -10,7 +10,7 @@
   <arg name="default_rad"          default="0.8"/>
   
   <!-- Node for LED contoroll -->
-  <node pkg="tsukuba2023" type="LED_control.py" name="LED_controller" output="screen"/>
+  <node pkg="tsukuba2023" type="LED_controlv1.py" name="LED_controller" output="screen"/>
   
   <!-- Node for saving waypoints -->
   <node name="waypoint_saver" pkg="waypoint_saver" type="waypoint_saver" output="screen">

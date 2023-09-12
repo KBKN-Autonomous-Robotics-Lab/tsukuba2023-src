@@ -14,7 +14,7 @@
   -->
   
   <!-- Node for LED contoroll -->
-  <node pkg="tsukuba2023" type="LED_control.py" name="LED_controller2" output="screen"/>
+  <node pkg="tsukuba2023" type="LED_controlv1.py" name="LED_controller2" output="screen"/>
 
   <!-- This section depends on the navigation package -->
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++ -->
