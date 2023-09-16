@@ -85,6 +85,7 @@ def perseheading(ackPacket):
     nowPoint[5] = int.from_bytes(bytevalue, byteorder='little',signed=True) 
     #print("heading:%f deg" %float(nowPoint[5]/100000))
     nowPoint[6]=nowPoint[5]/100000+90
+    if nowPoint[6]>360: nowPoint[6]-=360
     if(count == 0):
         first_heading=nowPoint[6]-180
         count = 1
