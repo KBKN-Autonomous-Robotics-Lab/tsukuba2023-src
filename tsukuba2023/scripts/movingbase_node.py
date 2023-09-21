@@ -53,7 +53,7 @@ def checksum(ackPacket,payloadlength ):
         return False
 
 def perseheading(ackPacket):
-    rospy.init_node('imu_yaw_publisher', anonymous=True)
+    #rospy.init_node('imu_yaw_publisher', anonymous=True)
     imu_msg = Imu()
     pub = rospy.Publisher('/movingbase_yaw', Imu, queue_size=10)
     
@@ -109,8 +109,8 @@ def perseheading(ackPacket):
     imu_msg.orientation.z = np.sin(movingbaseyaw)
     imu_msg.orientation.w = np.cos(movingbaseyaw)
            
-    if(nowPoint[4]==2):
-        pub.publish(imu_msg)
+    pub.publish(imu_msg)
+    
     rate.sleep()
     #rospy.spin()
     return nowPoint
