@@ -53,7 +53,7 @@ def checksum(ackPacket,payloadlength ):
         return False
 
 def perseheading(ackPacket):
-    #rospy.init_node('imu_yaw_publisher', anonymous=True)
+    rospy.init_node('movingbase_yaw')
     imu_msg = Imu()
     pub = rospy.Publisher('/movingbase_yaw', Imu, queue_size=10)
     
@@ -89,8 +89,6 @@ def perseheading(ackPacket):
     if(count == 0):
         first_heading=nowPoint[6]-180
         count = 1
-    print("robotheading:%f deg" %float(nowPoint[6]))
-    print("firstheading:%f deg" %float(first_heading))
     
     absolute_heading=nowPoint[6]-180#0~360>-180~180
     relative_heading=absolute_heading-first_heading#absolute heading>relative heading
@@ -98,6 +96,11 @@ def perseheading(ackPacket):
     movingbaseyaw=np.radians(relative_heading)/2.0#deg>radian 
     #movingbaseyaw=relative_heading*(math.pi/180)/2.0#deg>radian   
 
+    #print("robotheading:%f deg" %float(nowPoint[6]))
+    #print("firstheading:%f rad" %float(first_heading))
+    #print("robotheading:%f deg" %float(absolute_heading))
+    #print("firstheading:%f rad" %float(relative_heading))
+    
     #print("yaw:%f radian"%float(movingbaseyaw)) 
     #print("yaw:%f w"%float(np.sin(movingbaseyaw))) 
     #print("yaw:%f w"%float(np.sin(movingbaseyaw))) 
