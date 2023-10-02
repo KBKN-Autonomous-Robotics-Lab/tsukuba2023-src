@@ -84,16 +84,18 @@ def perseheading(ackPacket):
         bytevalue  +=  ackPacket[byteoffset+i] 
     nowPoint[5] = int.from_bytes(bytevalue, byteorder='little',signed=True) 
     #print("heading:%f deg" %float(nowPoint[5]/100000))
+    
     nowPoint[6]=nowPoint[5]/100000+90
     if nowPoint[6]>360: nowPoint[6]-=360
-    if(count == 0):
-        first_heading=nowPoint[6]-180
-        count = 1
+    
+    #if(count == 0):
+    #    first_heading=nowPoint[6]-180
+    #    count = 1
     
     absolute_heading=nowPoint[6]-180#0~360>-180~180
-    relative_heading=absolute_heading-first_heading#absolute heading>relative heading
+    #relative_heading=absolute_heading-first_heading#absolute heading>relative heading
     
-    movingbaseyaw=np.radians(relative_heading)/2.0#deg>radian 
+    movingbaseyaw=np.radians(absolute_heading)/2.0#deg>radian 
     #movingbaseyaw=relative_heading*(math.pi/180)/2.0#deg>radian   
 
     #print("robotheading:%f deg" %float(nowPoint[6]))
