@@ -5,7 +5,7 @@ from std_msgs.msg import Float64
 import math
 import numpy as np
 
-nowPoint=[0]*10
+nowPoint=[0]*7
 HEADER = 6
 count = 0
 first_heading= 0
@@ -88,15 +88,15 @@ def perseheading(ackPacket):
     nowPoint[6]=nowPoint[5]/100000+90
     if nowPoint[6]>360: nowPoint[6]-=360
     
-    #if(count == 0):
-    #    first_heading=nowPoint[6]-180
-    #    count = 1
-    
     absolute_heading=nowPoint[6]-180#0~360>-180~180
-    #relative_heading=absolute_heading-first_heading#absolute heading>relative heading
     
-    movingbaseyaw=np.radians(absolute_heading)/2.0#deg>radian 
-    #movingbaseyaw=relative_heading*(math.pi/180)/2.0#deg>radian   
+    if(count == 0):
+        first_heading=nowPoint[6]-180
+        count = 1
+    
+    relative_heading=absolute_heading-first_heading#absolute heading>relative heading
+    
+    movingbaseyaw=relative_heading*(math.pi/180)#deg>radian   
 
     #print("robotheading:%f deg" %float(nowPoint[6]))
     #print("firstheading:%f rad" %float(first_heading))
@@ -107,12 +107,12 @@ def perseheading(ackPacket):
     #print("yaw:%f w"%float(np.sin(movingbaseyaw))) 
     #print("yaw:%f w"%float(np.sin(movingbaseyaw))) 
     
-    imu_msg.header.stamp = nowPoint[2]#GPStime
+    imu_msg.header.stamp = rospy.get_rostime()#GPStime
     
     imu_msg.orientation.x = 0
     imu_msg.orientation.y = 0
-    imu_msg.orientation.z = np.sin(movingbaseyaw)
-    imu_msg.orientation.w = np.cos(movingbaseyaw)
+    imu_msg.orientation.z = movingbaseyaw #not orientation.z>>yaw
+    imu_msg.orientation.w = 0
            
     pub.publish(imu_msg)
     
