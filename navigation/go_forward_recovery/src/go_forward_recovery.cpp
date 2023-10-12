@@ -86,67 +86,98 @@ double GoForwardRecovery::null_check(double target){
 }
 */
 
-void GoForwardRecovery::scanCallback(const sensor_msgs::LaserScan::ConstPtr& msg){
+void GoForwardRecovery::scanCallback(const sensor_msgs::LaserScan::ConstPtr& scan_msg){
   vel_pub = n.advertise<geometry_msgs::Twist>("cmd_vel", 10);
   scan_sub = n.subscribe("/scan", 10, &GoForwardRecovery::scanCallback, this);
   
-  double center_number = (-msg->angle_min)/msg->angle_increment;
-  double center = msg->ranges[center_number];
-  double left = msg->ranges[center_number+128];
-  double right = msg->ranges[center_number-128];
-  double back_left = msg->ranges[msg->ranges.size()-1];
+  std::vector<float> ranges = scan_msg->ranges;
   
   sub_n = 0;
   sub_flag = 1;
   
-  center = null_check(center);
-  left = null_check(left);
-  right = null_check(right);
-  back_left = null_check(back_left);
+  //center
+  const int center_start_index = 250;
+  const int center_end_index = 350;
 
-  ROS_INFO("center: [%lf], left: [%lf], right: [%lf]", center, left, right);
-  ROS_INFO("center number: [%lf]", (-msg->angle_min)/msg->angle_increment);
+  float centerRange = ranges[250];
 
-  if(center < 0.5){
-    ROS_WARN("center warning!!");
-    cmd_vel.linear.x = 0.0;
-    cmd_vel.linear.y = 0.0;
-    cmd_vel.angular.z = -1.0;
-  }
-  if(left < 0.4){
-    ROS_WARN("left warning!!");
-    cmd_vel.linear.x = 0.0;
-    cmd_vel.linear.y = 0.0;
-    cmd_vel.angular.z = -1.0;
-  }
-  if(right < 0.4){
-    ROS_WARN("right warning!!");
-    cmd_vel.linear.x = 0.0;
-    cmd_vel.linear.y = 0.0;
-    cmd_vel.angular.z = 1.0;
-  }
-  if(center >=0.5 && left >= 0.4 && left < 1.0 && right >= 0.4){
-    cmd_vel.linear.x = 0.2;
-    cmd_vel.linear.y = 0.0;
-    cmd_vel.angular.z = 0.0;
-  }
-  if(center >=0.5 && left >= 1.0 && right >= 0.4 && back_left < 0.35){
-    cmd_vel.linear.x = 0.2;
-    cmd_vel.linear.y = 0.0;
-    cmd_vel.angular.z = 1.0;
-  }
-  if(center >=0.5 && left >= 1.0 && right >= 0.4 && back_left >= 0.35){
-    cmd_vel.linear.x = 0.2;
-    cmd_vel.linear.y = 0.0;
-    cmd_vel.angular.z = 0.0;
+  for (int i = center_start_index; i <= center_end_index; ++i){
+      if (ranges[i] < centerRange){
+              centerRange = ranges[i];
+      }
   }
 
-  ROS_INFO("x: %lf, y: %lf, z: %lf", cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z);
+  //ROS_INFO("center miniranges %f", centerRange);
+    
+  //right
+  const int right_start_index = 400;
+  const int right_end_index = 500;
   
-  vel_pub.publish(cmd_vel);
+  float rightRange = ranges[400];
+
+  for (int i = right_start_index; i <= right_end_index; ++i){
+      if (ranges[i] < rightRange){
+            rightRange = ranges[i];
+      }
+    }
+  
+  //ROS_INFO("right miniranges %f", rightRange);
+    
+  //left
+  const int left_start_index = 100;
+  const int left_end_index = 200;
+
+  float leftRange = ranges[100];
+
+  for (int i = left_start_index; i <= left_end_index; ++i){
+      if (ranges[i] < leftRange){
+            leftRange = ranges[i];
+      }
+  }
+
+  //ROS_INFO("left miniranges %f", leftRange);
+    
+  if (centerRange < 1 && sub_n == 0){
+      ROS_WARN("center warn");
+      cmd_vel.angular.z = -0.5;  // Set right rotation speed
+      ROS_INFO("Start of right rotation");
+      vel_pub.publish(cmd_vel);
+      sleep(2);  // Time of right rotation
+      // stop
+      cmd_vel.angular.z = 0.0;
+      ROS_INFO("Right rotation stop");
+      vel_pub.publish(cmd_vel);
+      sleep(2); 
+  }
+  else if (rightRange < 1 && sub_n == 0){
+      ROS_WARN("right warn");            
+      cmd_vel.angular.z = 0.5;  // Set right rotation speed
+      ROS_INFO("Start of right rotation");
+      vel_pub.publish(cmd_vel);
+      sleep(2);  // Time of right rotation
+      // stop
+      cmd_vel.angular.z = 0.0;
+      ROS_INFO("Right rotation stop");
+      vel_pub.publish(cmd_vel);
+      sleep(2); 
+  }
+  else if (leftRange < 1 && sub_n == 0){
+      ROS_WARN("left warn");
+      cmd_vel.angular.z = -0.5;  // Set right rotation speed
+      ROS_INFO("Start of right rotation");
+      vel_pub.publish(cmd_vel);
+      sleep(2);  // Time of right rotation
+      // stop
+      cmd_vel.angular.z = 0.0;
+      ROS_INFO("Right rotation stop");
+      vel_pub.publish(cmd_vel);
+      sleep(2); 
+  }
+    //ROS_INFO("x: %lf, y: %lf, z: %lf", cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z);
+  
   ROS_INFO("sub_n: %d", sub_n);
   sub_n++;
-  if(sub_n > 100){
+  if(sub_n > 10){ //100
     scan_sub.shutdown();
     sub_flag = 0;
     return;
@@ -171,6 +202,7 @@ void GoForwardRecovery::runBehavior(){
     if(sub_flag == 0){
       return;
     }
+    sleep(1);
   }
 }
 };
