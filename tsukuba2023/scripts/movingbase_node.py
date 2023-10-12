@@ -59,7 +59,7 @@ def perseheading(ackPacket):
     
     rate=rospy.Rate(10)
     global count
-    global first_heading
+    #global first_heading
     
     #GPStime
     byteoffset =4 +HEADER
@@ -68,7 +68,7 @@ def perseheading(ackPacket):
         bytevalue  +=  ackPacket[byteoffset+i] 
     nowPoint[1] = int.from_bytes(bytevalue, byteorder='little',signed=True)
     nowPoint[2] =nowPoint[1]/1000
-    print("GPStime:%f sec" %float(nowPoint[9]/1000))
+    print("GPStime:%f sec" %float(nowPoint[2]))
     
     #Carrier solution status
     flags = int.from_bytes(ackPacket[60 + HEADER], byteorder='little',signed=True)
@@ -85,16 +85,23 @@ def perseheading(ackPacket):
     nowPoint[5] = int.from_bytes(bytevalue, byteorder='little',signed=True) 
     #print("heading:%f deg" %float(nowPoint[5]/100000))
     
-    nowPoint[6]=nowPoint[5]/100000+90
-    if nowPoint[6]>360: nowPoint[6]-=360
+    #0~360
+    heading=nowPoint[5]/100000+90
+    if heading>360: heading-=360
     
-    absolute_heading=nowPoint[6]-180#0~360>-180~180
+    heading = nowPoint[6]
+    
+    #-180~-1
+    if heading>180 and heading<360:
+        heading -= 360
     
     if(count == 0):
-        first_heading=nowPoint[6]-180
+        first_heading=heading
+        if heading>180 and heading<360:
+            first_heading -= 360    
         count = 1
     
-    relative_heading=absolute_heading-first_heading#absolute heading>relative heading
+    relative_heading=heading-first_heading#absolute heading>relative heading
     
     movingbaseyaw=relative_heading*(math.pi/180)#deg>radian   
 
@@ -107,7 +114,7 @@ def perseheading(ackPacket):
     #print("yaw:%f w"%float(np.sin(movingbaseyaw))) 
     #print("yaw:%f w"%float(np.sin(movingbaseyaw))) 
     
-    imu_msg.header.stamp = rospy.get_rostime()#GPStime
+    imu_msg.header.stamp = rospy.get_rostime()
     
     imu_msg.orientation.x = 0
     imu_msg.orientation.y = 0
