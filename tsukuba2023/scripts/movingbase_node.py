@@ -89,8 +89,6 @@ def perseheading(ackPacket):
     heading=nowPoint[5]/100000+90
     if heading>360: heading-=360
     
-    heading = nowPoint[6]
-    
     #-180~-1
     if heading>180 and heading<360:
         heading -= 360
