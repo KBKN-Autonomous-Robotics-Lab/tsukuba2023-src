@@ -87,28 +87,20 @@ def perseheading(ackPacket):
     
     #0~360
     heading=nowPoint[5]/100000+90
-    #print(heading)
-    if heading>360: heading-=360
-    #print(heading)
-    
-    #-180~-1
-    if heading>180 and heading<360:
-        heading -= 360
+    if heading >= 360: heading -= 360
     
     if(count == 0):
-        first_heading=heading
-        if heading>180 and heading<360:
-            first_heading -= 360    
+        first_heading=heading   
         count = 1
+        
+    relative_heading=heading-first_heading    
+    if relative_heading < 0:
+        relative_heading += 360
     
-    if heading >0 and first_heading>0:#absolute heading>relative heading
-        relative_heading=heading-first_heading
-    elif heading >0 and first_heading<0:
-        relative_heading=heading+first_heading
-    elif heading <0 and first_heading>0:
-        relative_heading=heading+first_heading
-    elif heading <0 and first_heading<0:
-        relative_heading=heading-first_heading
+    #-180~-1
+    if relative_heading>180:
+        relative_heading -= 360
+    
     
     movingbaseyaw=relative_heading*(math.pi/180)#deg>radian   
 
