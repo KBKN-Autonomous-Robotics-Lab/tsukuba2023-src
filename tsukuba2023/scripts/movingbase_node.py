@@ -1,7 +1,6 @@
 import serial
 import rospy
 from sensor_msgs.msg import Imu
-from std_msgs.msg import Float64
 import math
 import numpy as np
 
@@ -58,8 +57,9 @@ def perseheading(ackPacket):
     pub = rospy.Publisher('/movingbase_yaw', Imu, queue_size=10)
     
     rate=rospy.Rate(10)
+    
     global count
-    #global first_heading
+    global first_heading
     
     #GPStime
     byteoffset =4 +HEADER
@@ -87,7 +87,9 @@ def perseheading(ackPacket):
     
     #0~360
     heading=nowPoint[5]/100000+90
+    #print(heading)
     if heading>360: heading-=360
+    #print(heading)
     
     #-180~-1
     if heading>180 and heading<360:
@@ -99,7 +101,14 @@ def perseheading(ackPacket):
             first_heading -= 360    
         count = 1
     
-    relative_heading=heading-first_heading#absolute heading>relative heading
+    if heading >0 and first_heading>0:#absolute heading>relative heading
+        relative_heading=heading-first_heading
+    elif heading >0 and first_heading<0:
+        relative_heading=heading+first_heading
+    elif heading <0 and first_heading>0:
+        relative_heading=heading+first_heading
+    elif heading <0 and first_heading<0:
+        relative_heading=heading-first_heading
     
     movingbaseyaw=relative_heading*(math.pi/180)#deg>radian   
 
@@ -118,8 +127,9 @@ def perseheading(ackPacket):
     imu_msg.orientation.y = 0
     imu_msg.orientation.z = movingbaseyaw #not orientation.z>>yaw
     imu_msg.orientation.w = 0
-           
-    pub.publish(imu_msg)
+    
+    if nowPoint[4] == 2:
+        pub.publish(imu_msg)
     
     rate.sleep()
     #rospy.spin()
