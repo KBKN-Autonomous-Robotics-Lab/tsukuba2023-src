@@ -4,7 +4,7 @@
     
     <!-- The robot URDF model and world file -->
     <arg name="model" default="$(find xacro)/xacro '$(find tsukuba2023)/urdf/orange.xacro'" />
-    <arg name="world" default="$(find tsukuba2023)/world/nakaniwa.world"/>
+    <arg name="world" default="$(find tsukuba2023)/world/hoseicourse.world"/>
 
     <!-- Initial pose of robot in the world--> 
     <arg name="x"     default="0"/>
