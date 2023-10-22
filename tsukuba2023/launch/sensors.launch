@@ -47,7 +47,14 @@
     </node>
     
     <!-- movingbase node -->
-    <node pkg="tsukuba2023" type="movingbase_node.py" name="movingbase_node" respawn="true">
+    <node pkg="tsukuba2023" type="movingbase_node_v1.py" name="movingbase_node_v1" respawn="true">
+        <param name="port" value="$(arg gps2_dev)"/>
+        <param name="baud" value="19200"/>
+        <param name="time_out" value="0.5"/>
+    </node>
+    
+    <!-- movingbase yaw  to quaternion-->
+    <node pkg="tsukuba2023" type="movingbasetoquo.py" name="movingbasetoquo" respawn="true"/>
     
     <!-- Node to setting up Arduino serial communication for LEDs -->
     <node pkg="rosserial_python" type="serial_node.py" name="serial_node_LED">

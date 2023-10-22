@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import serial
 import rospy
 from sensor_msgs.msg import Imu
@@ -8,13 +9,14 @@ nowPoint=[0]*7
 HEADER = 6
 count = 0
 first_heading= 0
+def __init__(self):
+    port = rospy.get_param("~port", "/dev/ttyACM0")
 
-
-def readPosned():
+def read_relposned():
     ackPacket=[b'\xB5',b'\x62',b'\x01',b'\x3C',b'\x00',b'\x00']
     i = 0
     payloadlength = 6
-    with serial.Serial('/dev/sensors/GNSSrover', 19200, timeout=1) as ser:
+    with serial.Serial(port, 19200, timeout=1) as ser:
         while i < payloadlength+8: 
             incoming_char = ser.read()         
             if (i < 3) and (incoming_char == ackPacket[i]):
@@ -129,4 +131,4 @@ def perseheading(ackPacket):
 
 while 1:
     while not rospy.is_shutdown():
-        readPosned()
+        read_relposned()
