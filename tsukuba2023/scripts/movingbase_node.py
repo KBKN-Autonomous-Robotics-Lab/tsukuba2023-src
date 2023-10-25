@@ -10,13 +10,13 @@ HEADER = 6
 count = 0
 first_heading= 0
 def __init__(self):
-    port = rospy.get_param("~port", "/dev/ttyACM0")
+    self.port = rospy.get_param("~port", "/dev/sensors/GNSSrover")
 
 def read_relposned():
     ackPacket=[b'\xB5',b'\x62',b'\x01',b'\x3C',b'\x00',b'\x00']
     i = 0
     payloadlength = 6
-    with serial.Serial(port, 19200, timeout=1) as ser:
+    with serial.Serial("/dev/sensors/GNSSrover", 19200, timeout=1) as ser:
         while i < payloadlength+8: 
             incoming_char = ser.read()         
             if (i < 3) and (incoming_char == ackPacket[i]):
@@ -36,7 +36,9 @@ def read_relposned():
                 i += 1
     if checksum(ackPacket,payloadlength) :
         perseheading(ackPacket)
-
+    
+    print(ackPacket)
+    print(payloadlength)
 
 def checksum(ackPacket,payloadlength ):
     CK_A =0
@@ -57,7 +59,7 @@ def perseheading(ackPacket):
     rospy.init_node('movingbase_yaw')
     imu_msg = Imu()
     pub = rospy.Publisher('/movingbase_yaw', Imu, queue_size=10)
-    
+    print(nowPoint)
     rate=rospy.Rate(10)
     
     global count
@@ -86,7 +88,7 @@ def perseheading(ackPacket):
         bytevalue  +=  ackPacket[byteoffset+i] 
     nowPoint[5] = int.from_bytes(bytevalue, byteorder='little',signed=True) 
     #print("heading:%f deg" %float(nowPoint[5]/100000))
-    
+    print(nowPoint)
     #0~360
     heading=nowPoint[5]/100000+90
     if heading >= 360: heading -= 360
