@@ -47,7 +47,7 @@
     </node>
     
     <!-- movingbase node -->
-    <node pkg="tsukuba2023" type="movingbase_node_v1.py" name="movingbase_node_v1" respawn="true">
+    <node pkg="tsukuba2023" type="movingbase_node.py" name="movingbase_node" respawn="true">
         <param name="port" value="$(arg gps2_dev)"/>
         <param name="baud" value="19200"/>
         <param name="time_out" value="0.5"/>
