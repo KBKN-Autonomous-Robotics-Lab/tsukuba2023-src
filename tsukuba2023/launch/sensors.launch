@@ -44,7 +44,7 @@
     </node>
     
     <!-- Convert gps to odom -->
-    <node name="GPSodom"   pkg="tsukuba2023" type="GPSodom_v1.py">
+    <node name="GPSodom"   pkg="tsukuba2023" type="GPSodom.py">
         <param name="heading" value="179.169287"/>
         <rosparam param="initial_coordinate">[35.709918, 139.523032]</rosparam>   
     </node>
@@ -116,12 +116,6 @@
         <param name="base_footprint_frame" value="base_footprint"/>
     </node>
     
-    <node name="gps_common" pkg="gps_common" type="utm_odometry_node">
-        <remap from="odom" to="vo"/>
-        <remap from="fix" to="/fix" />
-        <param name="rot_covariance" value="99999" />
-        <param name="frame_id" value="base_footprint" />
-    </node>
     -->
     <!-- -->
     <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" clear_params="true" output="screen">
