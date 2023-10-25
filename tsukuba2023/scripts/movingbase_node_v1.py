@@ -97,13 +97,11 @@ class movingbase_yaw:
     def movingbase_pub(self):
         nowpoint = self.readrelposned()
         
-        print(nowpoint)
-        
         #0~360
-        heading = nowpoint[3]/100000+90
+        heading = nowpoint[3]+90
         if heading >= 360: 
             heading -= 360
-    
+        
         if self.count == 0:
             self.first_heading=heading   
             self.count = 1
