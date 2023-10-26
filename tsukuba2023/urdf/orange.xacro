@@ -23,7 +23,7 @@
   <!-- Import 2D LiDAR model -->
   <xacro:include filename="$(find tsukuba2023)/urdf/sensors/hokuyo.urdf.xacro"/>
   <xacro:sensor_hokuyo name="hokuyo" parent="base_link" min_angle="-1.22" max_angle="1.22" samples="720">
-    <origin xyz="0.16 0.0 0.1" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0.25 0.0 0.1" rpy="0.0 0.0 0.0"/>
   </xacro:sensor_hokuyo>
   
   <!-- Import 3D LiDAR model -->
