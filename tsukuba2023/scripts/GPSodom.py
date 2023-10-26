@@ -2,7 +2,6 @@
 import rospy
 from sensor_msgs.msg import NavSatFix
 from nav_msgs.msg import Odometry
-import numpy as np
 import time
 import math
 
@@ -15,13 +14,9 @@ class GPSDataToodom:
         self.odom_pub = rospy.Publisher("/odom/gps", Odometry, queue_size=10)
         self.odom_msg = Odometry()
 
-        self.theta = rospy.get_param(
-            "~heading", 180
-        )  # initial heading azithm nakaniwa 179.169287 tsukuba 291.09504
-        self.initial_coordinate = rospy.get_param(
-            "~initial_coordinate", [35.709918, 139.523032]
-        )  # [latitude,longitude] nakaniwa 35.709918, 139.523032 tsukuba 36.082868166666664, 140.07699316666665
-
+        self.theta = rospy.get_param("~heading", 180)# initial heading azithm nakaniwa 179.169287 tsukuba 291.09504
+        self.initial_coordinate = rospy.get_param("~initial_coordinate", [35.709918, 139.523032])  # [latitude,longitude] nakaniwa 35.709918, 139.523032 tsukuba 36.082868166666664, 140.07699316666665
+        
         self.latlon_info = []
         self.count = 0
 
@@ -115,7 +110,7 @@ class GPSDataToodom:
             / 720
         )
         y = m0 * (B + y1 + y2 + y3)
-        # rospy.logdebug("y: %f", y)
+        rospy.logdebug("y: %f", y)
 
         x1 = r_delta_longitude * N * math.cos(r_latitude)
         x2 = (
@@ -139,7 +134,7 @@ class GPSDataToodom:
             / 120
         )
         x = m0 * (x1 + x2 + x3)
-        # rospy.logdebug("x: %f", x)
+        rospy.logdebug("x: %f", x)
 
         r_theta = theta * degree_to_radian
         h_x = math.cos(r_theta) * x - math.sin(r_theta) * y
@@ -164,8 +159,6 @@ class GPSDataToodom:
             # status.status = 2 is an analytical Fix solution based on the reference station. fix 2 nonfix -1
             if self.fix_topic.status.status == 2:
                 self.odom_pub.publish(self.odom_msg)
-            #self.latlon_info.clear()
-
 
 if __name__ == "__main__":
     # init node

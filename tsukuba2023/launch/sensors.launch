@@ -44,7 +44,7 @@
     </node>
     
     <!-- Convert gps to odom -->
-    <node name="GPSodom"   pkg="tsukuba2023" type="GPSodom.py">
+    <node name="GPSodom" pkg="tsukuba2023" type="GPSodom.py">
         <param name="heading" value="179.169287"/>
         <rosparam param="initial_coordinate">[35.709918, 139.523032]</rosparam>   
     </node>
