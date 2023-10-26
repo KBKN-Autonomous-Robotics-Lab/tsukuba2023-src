@@ -23,7 +23,7 @@ class movingbase_yaw:
         i = 0
         payloadlength = 6    
         with serial.Serial(self.port, self.baudrate, timeout=self.time_out) as ser:
-            while i < payloadlength+8: 
+            while i < payloadlength+8:#maybe checksum
                 incoming_char = ser.read()         
                 if (i < 3) and (incoming_char == ackPacket[i]):
                     i += 1

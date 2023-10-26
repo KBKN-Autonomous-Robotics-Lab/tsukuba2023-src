@@ -50,3 +50,4 @@ if  __name__ == "__main__":
     movingbasequat = movingbaseNode()
     while not rospy.is_shutdown():
         movingbasequat.movingbase_publish_msg()
+        rate.sleep()
