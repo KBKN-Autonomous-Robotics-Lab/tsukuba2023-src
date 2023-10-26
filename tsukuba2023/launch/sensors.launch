@@ -43,12 +43,22 @@
         <param name="baud" value="19200"/>
     </node>
     
+    <!-- movingbase node -->
+    <node pkg="tsukuba2023" type="movingbase_node.py" name="movingbase_node" respawn="true">
+        <param name="port" value="$(arg gps2_dev)"/>
+        <param name="baud" value="19200"/>
+        <param name="time_out" value="0.5"/>
+    </node>
+    
+    <!-- movingbase yaw  to quaternion-->
+    <node pkg="tsukuba2023" type="movingbase_to_quat.py" name="movingbase_to_quat" respawn="true"/>
+    
     <!-- Convert gps to odom -->
     <node name="GPSodom" pkg="tsukuba2023" type="GPSodom.py">
         <param name="heading" value="179.169287"/>
         <rosparam param="initial_coordinate">[35.709918, 139.523032]</rosparam>   
-    </node>
-    
+    </node> 
+
     <!-- Node to setting up Arduino serial communication for LEDs -->
     <node pkg="rosserial_python" type="serial_node.py" name="serial_node_LED">
         <param name="port" value="$(arg LED_dev)"/>
