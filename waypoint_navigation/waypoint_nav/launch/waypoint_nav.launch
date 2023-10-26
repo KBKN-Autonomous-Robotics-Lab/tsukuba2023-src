@@ -2,7 +2,7 @@
 
 <launch>
     <arg name="waypoints_file"     default="waypoints.yaml"/>
-    <arg name="StartFromTheMiddle" default="false"/>
+    <arg name="StartFromTheMiddle" default="true"/>
     <arg name="cmd_vel_topic_in"   default="/move_base/cmd_vel"/>
     <arg name="cmd_vel_topic_out"  default="/wp_nav/cmd_vel"/>
     <arg name="robot_frame"        default="base_link"/>
