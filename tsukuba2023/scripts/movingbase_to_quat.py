@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import rospy
 from sensor_msgs.msg import Imu
 import math
@@ -8,7 +8,7 @@ class movingbaseNode:
         # Initialize message and publisher
         self.sub_movingbase  = rospy.Subscriber('movingbase_yaw',Imu,self.movingbase_callback) 
         self.movingbase_msg = Imu()
-        self.heading_pub = rospy.Publisher('movingbase/quo', Imu, queue_size=10)
+        self.heading_pub = rospy.Publisher('movingbase/quat', Imu, queue_size=10)
         self.movingbase_info = []
         
     def movingbase_callback(self,data):
@@ -17,9 +17,7 @@ class movingbaseNode:
         self.movingbase_info.append(data.orientation.z)#1 yaw
         
     def movingbase_publish_msg(self):
-        rate = rospy.Rate(10)
         if len(self.movingbase_info) != 0:
-            #print(self.movingbase_data.orientation.z)
             roll = 0
             pitch = 0
         
@@ -34,8 +32,7 @@ class movingbaseNode:
             q1 = sinRoll * cosPitch * cosYaw - cosRoll * sinPitch * sinYaw;
             q2 = cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw;
             q3 = cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw;        
-            #print("orientation.x",q1,"orientation.y",q2,"orientation.z",q3,"orientation.w",q0)
-            
+           
             self.movingbase_msg.header.stamp = self.movingbase_data.header.stamp
             self.movingbase_msg.header.frame_id = "imu_link"
             self.movingbase_msg.orientation.x = q1
@@ -49,6 +46,7 @@ class movingbaseNode:
 if  __name__ == "__main__":
     # init node
     rospy.init_node("movingbase")
-    movingbasequo = movingbaseNode()####
+    rate = rospy.Rate(10)
+    movingbasequat = movingbaseNode()
     while not rospy.is_shutdown():
-        movingbasequo.movingbase_publish_msg()
+        movingbasequat.movingbase_publish_msg()

@@ -3,7 +3,6 @@ import serial
 import rospy
 from sensor_msgs.msg import Imu
 import math
-import numpy as np
 import time
 
 
@@ -13,8 +12,8 @@ class movingbase_yaw:
         self.count = 0
         self.first_heading = 0             
         self.port = rospy.get_param("~port", "/dev/sensors/GNSSrover")
-        self.baudrate = rospy.get_param("~baud", 115200)#19200
-        self.time_out = rospy.get_param("~time_out", 0.5)#1
+        self.baudrate = rospy.get_param("~baud", 19200)
+        self.time_out = rospy.get_param("~time_out", 1)
         
         self.imu_msg = Imu()
         self.pub = rospy.Publisher('/movingbase_yaw', Imu, queue_size=10)
@@ -71,15 +70,12 @@ class movingbase_yaw:
             bytevalue  +=  ackPacket[byteoffset+i] 
         time = int.from_bytes(bytevalue, byteorder='little',signed=True)
         gpstime = time/1000
-        #print("GPStime:%f sec" %float(gpstime))
         nowPoint.append(gpstime)#0
         
         #Carrier solution status
         flags = int.from_bytes(ackPacket[60 + self.HEADER], byteorder='little',signed=True)
         gnssFixOK  =  flags  & (1 << 0) #gnssFixOK 
         carrSoln =  (flags   & (0b11 <<3)) >> 3 #carrSoln0:no carrier 1:float 2:fix
-        #print("gnssFixOk:%d" %gnssFixOK)
-        #print("carrSoln:%d" %carrSoln)
         nowPoint.append(gnssFixOK)#1
         nowPoint.append(carrSoln)#2
         
@@ -89,7 +85,6 @@ class movingbase_yaw:
         for i in range(1,4):
             bytevalue  +=  ackPacket[byteoffset+i] 
         heading = int.from_bytes(bytevalue, byteorder='little',signed=True) 
-        #print("heading:%f deg" %float(heading/100000))
         nowPoint.append(heading/100000)#3
         
         return nowPoint
@@ -115,8 +110,6 @@ class movingbase_yaw:
             relative_heading -= 360
         
         movingbaseyaw=relative_heading*(math.pi/180)#deg>radian   
-
-        #print("yaw:%f w"%float(np.sin(movingbaseyaw))) 
     
         self.imu_msg.header.stamp = rospy.Time.now()
     
