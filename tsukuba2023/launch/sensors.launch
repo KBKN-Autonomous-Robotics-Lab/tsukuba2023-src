@@ -37,12 +37,11 @@
         <param name="frame_id" value="$(arg frame_id)"/>
     </node>
     
-    <!-- GPS node 
+    <!-- GPS node  -->
     <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="navsat" respawn="true">
         <param name="port" value="$(arg gps1_dev)"/>
         <param name="baud" value="19200"/>
     </node>
-    -->
     
     <!-- Node to setting up Arduino serial communication for LEDs -->
     <node pkg="rosserial_python" type="serial_node.py" name="serial_node_LED">
