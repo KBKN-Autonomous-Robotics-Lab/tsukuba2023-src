@@ -133,7 +133,7 @@
         <remap from="odom1" to="/odom/gps" />
         <remap from="imu0" to="/imu" />
     </node>
-    
+    -->
     <!--
     <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform" clear_params="true" output="screen">
         <rosparam command="load" file="$(find tsukuba2023)/config/navsatekf.yaml" />

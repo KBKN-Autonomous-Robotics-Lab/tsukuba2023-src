@@ -2,6 +2,7 @@
 import rospy
 from sensor_msgs.msg import Imu
 import math
+import tf
 
 class movingbaseNode:
     def __init__(self):
@@ -21,24 +22,14 @@ class movingbaseNode:
             roll = 0
             pitch = 0
         
-            cosRoll = math.cos(roll / 2);
-            sinRoll = math.sin(roll / 2);
-            cosPitch = math.cos(pitch / 2);
-            sinPitch = math.sin(pitch / 2);
-            cosYaw = math.cos(self.movingbase_data.orientation.z / 2);
-            sinYaw = math.sin(self.movingbase_data.orientation.z  / 2);
-
-            q0 = cosRoll * cosPitch * cosYaw + sinRoll * sinPitch * sinYaw;
-            q1 = sinRoll * cosPitch * cosYaw - cosRoll * sinPitch * sinYaw;
-            q2 = cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw;
-            q3 = cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw;        
-           
-            self.movingbase_msg.header.stamp = self.movingbase_data.header.stamp
+            q = tf.transformations.quaternion_from_euler(roll, pitch, self.movingbase_data.orientation.z)        
+            
+            self.movingbase_msg.header.stamp = self.movingbase_info[0]
             self.movingbase_msg.header.frame_id = "imu_link"
-            self.movingbase_msg.orientation.x = q1
-            self.movingbase_msg.orientation.y = q2
-            self.movingbase_msg.orientation.z = q3
-            self.movingbase_msg.orientation.w = q0
+            self.movingbase_msg.orientation.x = q[0]
+            self.movingbase_msg.orientation.y = q[1]
+            self.movingbase_msg.orientation.z = -q[2]
+            self.movingbase_msg.orientation.w = q[3]
             self.heading_pub.publish(self.movingbase_msg)        
             self.movingbase_info.clear()
     
