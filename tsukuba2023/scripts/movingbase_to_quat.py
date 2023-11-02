@@ -24,7 +24,7 @@ class movingbaseNode:
         
             q = tf.transformations.quaternion_from_euler(roll, pitch, self.movingbase_data.orientation.z)        
             
-            self.movingbase_msg.header.stamp = self.movingbase_info[0]
+            self.movingbase_msg.header.stamp = rospy.Time.now()
             self.movingbase_msg.header.frame_id = "imu_link"
             self.movingbase_msg.orientation.x = q[0]
             self.movingbase_msg.orientation.y = q[1]
