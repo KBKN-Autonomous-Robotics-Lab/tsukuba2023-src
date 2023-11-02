@@ -37,7 +37,7 @@ class movingbaseNode:
 if  __name__ == "__main__":
     # init node
     rospy.init_node("movingbase")
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(1)
     movingbasequat = movingbaseNode()
     while not rospy.is_shutdown():
         movingbasequat.movingbase_publish_msg()

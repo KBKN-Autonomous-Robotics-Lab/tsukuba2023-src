@@ -163,7 +163,7 @@ class GPSDataToodom:
 if __name__ == "__main__":
     # init node
     rospy.init_node("gps_data_acquisition")
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(1)
     gtodom = GPSDataToodom()
     while not rospy.is_shutdown():
         gtodom.pub()

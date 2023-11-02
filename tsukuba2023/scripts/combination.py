@@ -8,7 +8,7 @@ class combination_CLAS_movingbase:
     def __init__(self):
         self.sub1 = message_filters.Subscriber("/odom/gps", Odometry)
         self.sub2 = message_filters.Subscriber("movingbase/quat", Imu)#sub3.sub4--- ok
-        self.mf = message_filters.ApproximateTimeSynchronizer([self.sub1, self.sub2],10,0.1,allow_headerless=True)
+        self.mf = message_filters.ApproximateTimeSynchronizer([self.sub1, self.sub2],10,0.5,allow_headerless=True)
         self.mf.registerCallback(self.callback)
         
         self.odom_pub = rospy.Publisher("/CLAS_movingbase", Odometry, queue_size=10)
@@ -47,7 +47,7 @@ class combination_CLAS_movingbase:
 if __name__ == "__main__":
     # init node
     rospy.init_node('CLASmovingbase')
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(1)
     comb = combination_CLAS_movingbase()
     while not rospy.is_shutdown():
         comb.pub()
