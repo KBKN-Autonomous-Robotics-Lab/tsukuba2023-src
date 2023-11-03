@@ -9,7 +9,9 @@
   <arg name="mb_cmd_vel"     default="/move_base/cmd_vel"/>
   <arg name="wp_cmd_vel"     default="/cmd_vel"/>
 
-
+  <!-- Node for LED contoroll -->
+  <node pkg="tsukuba2023" type="LED_controlv1.py" name="LED_controller3" output="screen"/>
+  
   <!-- This section depends on the navigation package -->
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++ -->
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
