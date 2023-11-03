@@ -1,4 +1,4 @@
-image: /home/ubuntu/catkin_ws/src/tsukuba2023/maps/mymap.pgm
+image: /home/ubuntu/catkin_ws/src/tsukuba2023/maps/tsukuba_map1.pgm
 resolution: 0.100000
 origin: [-50.000000, -184.400000, 0.000000]
 negate: 0
