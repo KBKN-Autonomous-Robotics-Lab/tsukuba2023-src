@@ -40,13 +40,13 @@
     <!-- GPS node  -->
     <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="navsat" respawn="true">
         <param name="port" value="$(arg gps1_dev)"/>
-        <param name="baud" value="19200"/>
+        <param name="baud" value="9600"/>
     </node>
     
     <!-- movingbase node -->
     <node pkg="tsukuba2023" type="movingbase_node.py" name="movingbase_node" respawn="true">
         <param name="port" value="$(arg gps2_dev)"/>
-        <param name="baud" value="19200"/>
+        <param name="baud" value="9600"/>
         <param name="time_out" value="0.5"/>
     </node>
     

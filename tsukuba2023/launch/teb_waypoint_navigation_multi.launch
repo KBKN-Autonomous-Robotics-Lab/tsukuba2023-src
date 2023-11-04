@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <launch>
-  <arg name="maps_dir"       default="$(find tsukuba2023)/multimaps/tsukuba2023_multimaps"/>
-  <arg name="waypoints_file" default="$(find tsukuba2023)/multimaps/tsukuba2023_multimaps/waypoints.yaml"/>
+  <arg name="maps_dir"       default="$(find tsukuba2023)/multimaps/tsukuba2023_multimaps_edited"/>
+  <arg name="waypoints_file" default="$(find tsukuba2023)/multimaps/tsukuba2023_multimaps_edited/waypoints.yaml"/>
   <arg name="init_pos_file"  default="$(find tsukuba2023)/config/initial_pose.yaml"/>
   <arg name="start_map_num"  default="0"/>
   <arg name="odom_topic"     default="/combine_dr_measurements/odom_combined"/>
