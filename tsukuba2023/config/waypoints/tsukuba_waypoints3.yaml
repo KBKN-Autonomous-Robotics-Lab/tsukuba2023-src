@@ -3,9 +3,9 @@ waypoints:
 - point: {x: 12.7217, y: 0.67812, z: 0, vel: 1, rad: 0.8, stop: false}
 - point: {x: 18.7424, y: 1.01709, z: 0, vel: 1, rad: 0.8, stop: false}
 - point: {x: 24.1998, y: 6.26787, z: 0, vel: 1, rad: 0.8, stop: false}
-- point: {x: 28.5279, y: 9.91822, z: 0, vel: 1, rad: 0.8, stop: false}
+- point: {x: 28.5279, y: 9.91822, z: 0, vel: 1, rad: 0.8, stop: true}
 - point: {x: 40.8917, y: 18.6359, z: 0, vel: 1, rad: 0.8, stop: false}
-- point: {x: 47.6045, y: 13.4797, z: 0, vel: 1, rad: 0.8, stop: false}
+- point: {x: 47.6045, y: 13.4797, z: 0, vel: 1, rad: 0.8, stop: true}
 - point: {x: 55.8581, y: 1.43388, z: 0, vel: 1, rad: 0.8, stop: false}
 - point: {x: 60.0608, y: -5.03815, z: 0, vel: 1, rad: 0.8, stop: false}
 - point: {x: 63.1514, y: -9.29613, z: 0, vel: 1, rad: 0.8, stop: false}
@@ -32,7 +32,7 @@ waypoints:
 - point: {x: 161.252, y: -8.93902, z: 0, vel: 1, rad: 0.8, stop: false}
 - point: {x: 165.563, y: -3.21735, z: 0, vel: 1, rad: 0.8, stop: false}
 - point: {x: 169.996, y: 2.8545, z: 0, vel: 1, rad: 0.8, stop: false}
-- point: {x: 173.871, y: 8.40251, z: 0, vel: 1, rad: 0.8, stop: false}
+- point: {x: 173.871, y: 8.40251, z: 0, vel: 1, rad: 0.8, stop: true}
 - point: {x: 178.093, y: 14.7491, z: 0, vel: 1, rad: 0.8, stop: false}
 - point: {x: 182.083, y: 20.4354, z: 0, vel: 1, rad: 0.8, stop: false}
 - point: {x: 187.028, y: 26.0844, z: 0, vel: 1, rad: 0.8, stop: false}
@@ -43,7 +43,7 @@ waypoints:
 - point: {x: 207.028, y: 55.9916, z: 0, vel: 1, rad: 0.8, stop: false}
 - point: {x: 210.881, y: 62.1243, z: 0, vel: 1, rad: 0.8, stop: false}
 - point: {x: 214.286, y: 68.3365, z: 0, vel: 1, rad: 0.8, stop: false}
-- point: {x: 218.887, y: 70.9631, z: 0, vel: 1, rad: 0.8, stop: false}
+- point: {x: 218.887, y: 70.9631, z: 0, vel: 1, rad: 0.8, stop: true}
 - point: {x: 222.478, y: 76.429, z: 0, vel: 1, rad: 0.8, stop: false}
 - point: {x: 224.283, y: 79.3506, z: 0, vel: 1, rad: 0.8, stop: false}
 - point: {x: 227.868, y: 85.3665, z: 0, vel: 1, rad: 0.8, stop: false}
@@ -56,7 +56,7 @@ waypoints:
 - point: {x: 191.714, y: 115.084, z: 0, vel: 1, rad: 0.8, stop: false}
 - point: {x: 186.589, y: 118.549, z: 0, vel: 1, rad: 0.8, stop: false}
 finish_pose:
-  header: {seq: 0, stamp: 1698980872.108179978, frame_id: map}
-  pose: 
+  header: {seq: 0, stamp: 1698980872.10818, frame_id: map}
+  pose:
     position: {x: 180.816, y: 124.3, z: 0}
-    orientation: {x: 0, y: 0, z: 0.974924, w: 0.222537}
+    orientation: {x: 0.0, y: 0.0, z: 0.9749242329362375, w: 0.22253705317022807}
