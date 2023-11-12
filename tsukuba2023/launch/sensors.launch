@@ -55,8 +55,7 @@
     
     <!-- Convert gps to odom -->
     <node name="GPSodom" pkg="tsukuba2023" type="GPSodom.py">
-        <param name="heading" value="179.169287"/>
-        <rosparam param="initial_coordinate">[35.709918, 139.523032]</rosparam>   
+        <param name="heading" value="179.169287"/>   
     </node> 
 
     <!-- Node to setting up Arduino serial communication for LEDs -->
@@ -112,9 +111,9 @@
     <!-- Ground segmentation, Pointcloud to laserscan, Merge scans -->
     <include file="$(find tsukuba2023)/launch/segmentation.launch"/>
     
-    <!-- Sensor fusion -->  
+    <!-- Sensor fusion   
     <node name="combine_dr_measurements" pkg="robot_pose_ekf" type="robot_pose_ekf">
-        <remap from="odom"         to="/CLAS_movingbase"/>
+        <remap from="odom"         to="/odom"/>
         <remap from="imu_data"     to="/imu"/>
         <param name="freq"                 value="30.0"/>
         <param name="sensor_timeout"       value="1.0"/>
@@ -124,15 +123,15 @@
         <param name="output_frame"         value="odom"/>
         <param name="base_footprint_frame" value="base_footprint"/>
     </node>
-    
-    <!-- 
+    -->
+    <!-- -->
     <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" clear_params="true" output="screen">
         <rosparam command="load" file="$(find tsukuba2023)/config/ekf.yaml" />
         <remap from="odom0" to="/odom" />
         <remap from="odom1" to="/CLAS_movingbase" />
         <remap from="imu0" to="/imu" />
     </node>
-    -->
+    
     <!--
     <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform" clear_params="true" output="screen">
         <rosparam command="load" file="$(find tsukuba2023)/config/navsatekf.yaml" />
