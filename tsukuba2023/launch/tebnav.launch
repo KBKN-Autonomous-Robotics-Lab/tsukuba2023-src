@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 
 <launch>
-  <arg name="map_file"       default="$(find tsukuba2023)/maps/20230923_Middle"/>
-  <arg name="waypoints_file" default="$(find tsukuba2023)/config/waypoints/20230923_Middle.yaml"/> 
+  <arg name="map_file"       default="$(find tsukuba2023)/maps/nakaniwa/mymap_nakaniwa"/>
+  <arg name="waypoints_file" default="$(find tsukuba2023)/config/waypoints/nakaniwa/waypoints_nakaniwa.yaml"/> 
   <arg name="init_pos_file"  default="$(find tsukuba2023)/config/initial_pose.yaml"/>
-  <arg name="odom_topic"     default="/combine_dr_measurements/odom_combined"/>
+  <arg name="odom_topic"     default="/odometry/filtered"/>
   <arg name="mb_cmd_vel"     default="/move_base/cmd_vel"/>
   <arg name="wp_cmd_vel"     default="/cmd_vel"/>
   <!--

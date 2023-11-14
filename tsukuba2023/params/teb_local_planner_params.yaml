@@ -2,22 +2,22 @@ base_local_planner: teb_local_planner/TebLocalPlannerROS
 
 TebLocalPlannerROS:
   
-  odom_topic: odom
-  map_frame: /map
+  odom_topic: odometry/filtered
+  map_frame: map
   
   # Trajectory
   teb_autosize: True
-  dt_ref: 0.5 軌道の解像度[s]
+  dt_ref: 0.5 #軌道の解像度[s]
   dt_hysteresis: 0.1
   global_plan_overwrite_orientation: True
   max_global_plan_lookahead_dist: 5.0 #仮想的なローカルゴールまでの距離
   feasibility_check_no_poses: 5
   
   # Robot
-  max_vel_x: 1.2
+  max_vel_x: 0.7 #1.2
   max_vel_x_backwards: 0.2
   max_vel_theta: 0.5
-  acc_lim_x: 2.0
+  acc_lim_x: 1.0 #2.0
   acc_lim_theta: 1.0
   min_turning_radius: 0.0
   footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
@@ -28,8 +28,8 @@ TebLocalPlannerROS:
     line_end: [0.13, 0.0]
   
   # GoalTolerance
-  xy_goal_tolerance: 0.3
-  yaw_goal_tolerance: 0.3
+  xy_goal_tolerance: 0.5 #0.3
+  yaw_goal_tolerance: 0.5 #0.3
   free_goal_vel: False
   
   # Obstacles
