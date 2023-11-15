@@ -33,9 +33,6 @@ class TandemManager():
         ## Waypoint navigation service clients
         self.stop_nav = rospy.ServiceProxy("/stop_wp_nav", Trigger)
         self.resume_nav = rospy.ServiceProxy("/resume_nav", Trigger)
-        ## Dynamic reconfigure clients
-        self.costmap_client1 = dynamic_reconfigure.client.Client("/move_base/global_costmap/obstacle_layer1")
-        self.costmap_client2 = dynamic_reconfigure.client.Client("/move_base/global_costmap/obstacle_layer2")
         ## Variable
         self.front_angle = 20 # degree
         self.danger_dist = 1.2 # meter
@@ -43,6 +40,9 @@ class TandemManager():
         self.front_range = None
         self.in_tandem_area = False
         self.stop = False
+        ## Dynamic reconfigure clients
+        self.costmap_client1 = dynamic_reconfigure.client.Client("/move_base/global_costmap/obstacle_layer1")
+        self.costmap_client2 = dynamic_reconfigure.client.Client("/move_base/global_costmap/obstacle_layer2")
         return
 
 
