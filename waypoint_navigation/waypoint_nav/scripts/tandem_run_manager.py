@@ -27,9 +27,6 @@ class TandemManager():
             if ("tandem_end" in data["point"]):
                 self.tandem_end_list.append(i+2)
         self.no_tandem_area = (len(self.tandem_start_list) == 0)
-        ## Subscribers
-        self.wp_num_sub = rospy.Subscriber("/waypoint_num", UInt16, self.waypoint_num_callback)
-        self.scan_sub = rospy.Subscriber("/scan", LaserScan, self.laserscan_callback)
         ## Waypoint navigation service clients
         self.stop_nav = rospy.ServiceProxy("/stop_wp_nav", Trigger)
         self.resume_nav = rospy.ServiceProxy("/resume_nav", Trigger)
@@ -43,6 +40,9 @@ class TandemManager():
         self.front_range = None
         self.in_tandem_area = False
         self.stop = False
+        ## Subscribers
+        self.wp_num_sub = rospy.Subscriber("/waypoint_num", UInt16, self.waypoint_num_callback)
+        self.scan_sub = rospy.Subscriber("/scan", LaserScan, self.laserscan_callback)
         return
 
 
