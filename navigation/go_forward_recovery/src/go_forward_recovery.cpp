@@ -90,7 +90,7 @@ void GoForwardRecovery::scanCallback(const sensor_msgs::LaserScan::ConstPtr& sca
   vel_pub = n.advertise<geometry_msgs::Twist>("cmd_vel", 10);
   scan_sub = n.subscribe("/scan", 10, &GoForwardRecovery::scanCallback, this);
   
-  std::vector<float> ranges = scan_msg->ranges;
+  std::vector<float> ranges = scan_msg->ranges;//range value [m]
   
   sub_n = 0;
   sub_flag = 1;
@@ -137,7 +137,7 @@ void GoForwardRecovery::scanCallback(const sensor_msgs::LaserScan::ConstPtr& sca
 
   //ROS_INFO("left miniranges %f", leftRange);
     
-  if (centerRange < 1 && sub_n == 0){
+  if (centerRange < 0.3){
       ROS_WARN("center warn");
       cmd_vel.angular.z = -0.5;  // Set right rotation speed
       ROS_INFO("Start of right rotation");
@@ -149,7 +149,7 @@ void GoForwardRecovery::scanCallback(const sensor_msgs::LaserScan::ConstPtr& sca
       vel_pub.publish(cmd_vel);
       sleep(2); 
   }
-  else if (rightRange < 1 && sub_n == 0){
+  else if (rightRange < 0.3){
       ROS_WARN("right warn");            
       cmd_vel.angular.z = 0.5;  // Set right rotation speed
       ROS_INFO("Start of right rotation");
@@ -161,7 +161,7 @@ void GoForwardRecovery::scanCallback(const sensor_msgs::LaserScan::ConstPtr& sca
       vel_pub.publish(cmd_vel);
       sleep(2); 
   }
-  else if (leftRange < 1 && sub_n == 0){
+  else if (leftRange < 0.3){
       ROS_WARN("left warn");
       cmd_vel.angular.z = -0.5;  // Set right rotation speed
       ROS_INFO("Start of right rotation");
