@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 
 <launch>
-  <arg name="map_file"       default="$(find tsukuba2023)/maps/nakaniwa/mymap_nakaniwa"/>
-  <arg name="waypoints_file" default="$(find tsukuba2023)/config/waypoints/nakaniwa/waypoints_nakaniwa.yaml"/> 
+
+  <arg name="map_file"       default="$(find tsukuba2023)/maps/tsukuba2023_edited/tsukuba_map1"/>
+  <arg name="waypoints_file" default="$(find tsukuba2023)/config/waypoints/tsukuba2023/tsukuba_waypoints1.yaml"/> 
+
   <arg name="init_pos_file"  default="$(find tsukuba2023)/config/initial_pose.yaml"/>
   <arg name="odom_topic"     default="/odometry/filtered"/>
   <arg name="mb_cmd_vel"     default="/move_base/cmd_vel"/>
   <arg name="wp_cmd_vel"     default="/cmd_vel"/>
-  
   <!--
   /odometry/filtered
   /combine_dr_measurements/odom_combined

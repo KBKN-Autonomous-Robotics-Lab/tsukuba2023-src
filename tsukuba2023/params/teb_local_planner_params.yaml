@@ -14,7 +14,9 @@ TebLocalPlannerROS:
   feasibility_check_no_poses: 5
   
   # Robot
-  max_vel_x: 0.7 #1.2
+
+  max_vel_x: 1.5 #1.2
+
   max_vel_x_backwards: 0.2
   max_vel_theta: 0.5
   acc_lim_x: 1.0 #2.0
