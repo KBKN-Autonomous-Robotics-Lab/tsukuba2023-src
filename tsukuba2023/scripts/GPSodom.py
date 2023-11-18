@@ -15,7 +15,6 @@ class GPSDataToodom:
         self.odom_msg = Odometry()
 
         self.theta = rospy.get_param("~heading", 180)# initial heading azithm nakaniwa 179.169287 tsukuba 291.09504
-        self.initial_coordinate = rospy.get_param("~initial_coordinate", [35.709918, 139.523032])  # [latitude,longitude] nakaniwa 35.709918, 139.523032 tsukuba 36.082868166666664, 140.07699316666665
         
         self.latlon_info = []
         self.count = 0
@@ -144,6 +143,9 @@ class GPSDataToodom:
 
     def pub(self):
         if len(self.latlon_info) != 0:
+            if self.count == 0:
+                self.initial_coordinate = [self.fix_topic.latitude,self.fix_topic.longitude]
+                self.count = 1
             latlon = [self.fix_topic.latitude,self.fix_topic.longitude]
             GPSxy = self.conversion(
                 latlon, self.initial_coordinate, self.theta
@@ -163,7 +165,7 @@ class GPSDataToodom:
 if __name__ == "__main__":
     # init node
     rospy.init_node("gps_data_acquisition")
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(1)
     gtodom = GPSDataToodom()
     while not rospy.is_shutdown():
         gtodom.pub()
