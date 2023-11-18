@@ -55,7 +55,7 @@
     
     <!-- Convert gps to odom -->
     <node name="GPSodom" pkg="tsukuba2023" type="GPSodom.py">
-        <param name="heading" value="179.169287"/>   
+        <param name="heading" value="291.09504"/>   
     </node> 
 
     <!-- Node to setting up Arduino serial communication for LEDs -->
