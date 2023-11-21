@@ -1,4 +1,9 @@
+controller_patience: 15 #default 15
+max_planning_retries: -1 #default -1
+oscillation_timeout: 0.0 #default 0.0
+
 recovery_behaviors: [{name: aggressive_reset, type: clear_costmap_recovery/ClearCostmapRecovery},
                      #{name: simple_lead_out, type: simple_lead_out/SimpleLeadOut},
                      #{name: rotate_recovery, type: rotate_recovery/RotateRecovery},
+                     #{name: go_forward_recovery, type: go_forward_recovery/GoForwardRecovery},
                      {name: conservative_reset, type: clear_costmap_recovery/ClearCostmapRecovery}]

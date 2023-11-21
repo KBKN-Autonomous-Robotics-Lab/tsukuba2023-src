@@ -1123,7 +1123,7 @@ namespace move_base {
         recovery_behavior_names_.push_back("rotate_recovery");
         recovery_behaviors_.push_back(rotate);
       }
-
+            
       //next, we'll load a recovery behavior that will do an aggressive reset of the costmap
       boost::shared_ptr<nav_core::RecoveryBehavior> ags_clear(recovery_loader_.createInstance("clear_costmap_recovery/ClearCostmapRecovery"));
       ags_clear->initialize("aggressive_reset", &tf_, planner_costmap_ros_, controller_costmap_ros_);
